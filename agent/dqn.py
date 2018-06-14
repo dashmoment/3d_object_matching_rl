@@ -42,23 +42,23 @@ class dqn:
         
         model = Sequential()
         model.add(Convolution2D(
-                nb_filter = 128,
-                kernel_size = 5,
+                nb_filter = 64,
+                kernel_size = 3,
                 padding='same',
                 input_shape=input_shape    
         ))
         model.add(Activation('selu'))
-        #model.add(MaxPooling1D(stride=1))
+        model.add(MaxPooling2D(stride=1))
         model.add(Convolution2D(
-                nb_filter = 128,
+                nb_filter = 64,
                 kernel_size = 3,
                 padding='same'        
         ))
         model.add(Activation('selu'))
             
         model.add(Flatten())
-        model.add(Dropout(0.4))
-        model.add(Dense(128, activation='selu'))
+        #model.add(Dropout(0.4))
+        model.add(Dense(64, activation='selu'))
         model.add(Dense(output_shape))
         model.add(Activation('linear'))
         

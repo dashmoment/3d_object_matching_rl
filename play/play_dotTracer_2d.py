@@ -2,6 +2,7 @@ import sys
 sys.path.append('../')
 import copy
 import numpy as np
+import matplotlib.pyplot as plt
 
 from env import dotTracer_2d as env  
 from agent import dqn 
@@ -38,6 +39,7 @@ max_mameroy_size = 128
 memory = []
 loss_log = []
 reward_log = []
+cum_reward = 0
 
 for iteration in range(1000000) :
     
@@ -53,13 +55,16 @@ for iteration in range(1000000) :
     print('*******************************')
     
     if iteration > max_mameroy_size:
+        _ = input("check")
         agent.train(memory, iteration)
         loss_log.append(agent.loss)
-        reward_log.append(reward)   
+        cum_reward += reward 
+        reward_log.append(cum_reward)   
         
         print('reward:{}, loss:{} '.format(reward, agent.loss))
     
     
-    
+plt.plot(reward_log)
+plt.plot(loss_log)
 
 
