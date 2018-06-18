@@ -21,7 +21,7 @@ class dqn:
         self.output_shape = output_shape
         self.epsilon = epsilon
         self.min_epsilon = min_epsilon
-        self.epsilon_decayrate = (epsilon - self.min_epsilon)/200
+        self.epsilon_decayrate = (epsilon - self.min_epsilon)/100
         
         self.GAMMA = GAMMA
         self.learning_rate = learning_rate
@@ -48,17 +48,26 @@ class dqn:
                 input_shape=input_shape    
         ))
         model.add(Activation('selu'))
-        model.add(MaxPooling2D(stride=1))
         model.add(Convolution2D(
                 nb_filter = 64,
+                kernel_size = 3,
+                padding='same',
+                input_shape=input_shape    
+        ))
+        model.add(Activation('selu'))
+        
+        model.add(MaxPooling2D(strides=1))
+        
+        model.add(Convolution2D(
+                nb_filter = 128,
                 kernel_size = 3,
                 padding='same'        
         ))
         model.add(Activation('selu'))
             
         model.add(Flatten())
-        #model.add(Dropout(0.4))
-        model.add(Dense(64, activation='selu'))
+        model.add(Dropout(0.4))
+        model.add(Dense(128, activation='selu'))
         model.add(Dense(output_shape))
         model.add(Activation('linear'))
         
@@ -81,7 +90,7 @@ class dqn:
     
     def train(self, memory, iteration): #memory: [ s, a, r , s']
         
-         if self.epsilon >  self.min_epsilon:
+         if self.epsilon  - self.epsilon_decayrate >  self.min_epsilon:
              if iteration%500 == 0:
                  self.epsilon = self.epsilon - self.epsilon_decayrate
              

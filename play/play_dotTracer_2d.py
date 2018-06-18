@@ -3,6 +3,7 @@ sys.path.append('../')
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 from env import dotTracer_2d as env  
 from agent import dqn 
@@ -41,7 +42,7 @@ loss_log = []
 reward_log = []
 cum_reward = 0
 
-for iteration in range(1000000) :
+for iteration in tqdm(range(1000000)) :
     
     if len(memory) > max_mameroy_size:
         memory = memory[1:]
@@ -50,18 +51,21 @@ for iteration in range(1000000) :
     action = agent.action(state[np.newaxis,:])      
     state_t1, reward, isFinish = env_o.update(action_map[np.argmax(action)])        
     memory.append([state, np.argmax(action), reward, state_t1, isFinish])        
+    
+    '''
     print('***********', np.argmax(action) ,'*************')
     print(env_o.maze[:,:,0])      
     print('*******************************')
+    '''
     
-    if iteration > max_mameroy_size:
-        _ = input("check")
+    if iteration > max_mameroy_size:     
         agent.train(memory, iteration)
         loss_log.append(agent.loss)
         cum_reward += reward 
         reward_log.append(cum_reward)   
         
         print('reward:{}, loss:{} '.format(reward, agent.loss))
+        #_ = input("check")
     
     
 plt.plot(reward_log)
