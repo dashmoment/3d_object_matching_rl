@@ -21,7 +21,7 @@ class dqn:
         self.output_shape = output_shape
         self.epsilon = epsilon
         self.min_epsilon = min_epsilon
-        self.epsilon_decayrate = (epsilon - self.min_epsilon)/100
+        self.epsilon_decayrate = (epsilon - self.min_epsilon)/200
         
         self.GAMMA = GAMMA
         self.learning_rate = learning_rate
